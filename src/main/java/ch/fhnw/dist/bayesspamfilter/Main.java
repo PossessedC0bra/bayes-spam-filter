@@ -53,6 +53,7 @@ public class Main {
         double fn = (double) (actualHam - classifiedHam) / actualHam;
         double tn = (double) classifiedHam / actualHam;
 
+        System.out.println();
         System.out.println("                   Predicted   ");
         System.out.println();
         System.out.println("                  Spam    Ham  ");
@@ -61,6 +62,16 @@ public class Main {
         System.out.println("Actual          ---------------");
         System.out.printf("          Ham   | %.2f | %.2f |\n", fn, tn);
         System.out.println("                ---------------");
+        System.out.println();
+
+        double precision = tp / (tp + fp);
+        double recall = tp / (tp + fn);
+
+        System.out.println("Precision: " + precision);
+        System.out.println("Recall: " + recall);
+        System.out.println("F1-Score: " + 2 * (precision * recall) / (precision + recall));
+        System.out.println();
+        System.out.println("Accuracy: " + (tp + tn) / (tp + fp + fn + tn));
     }
 
 }
