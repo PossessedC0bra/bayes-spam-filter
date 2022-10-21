@@ -15,13 +15,13 @@ public class BayesSpamFilter {
     private static final double ALPHA = 1E-16;
     private static final double SPAM_THRESHOLD = 0.5;
 
-    private int hamEmailCount;
-    private int spamEmailCount;
+    private int numberOfHamEmails;
+    private int numberOfSpamEmails;
     public final Map<String, WordStatistics> wordStatistics;
 
     public BayesSpamFilter() {
-        hamEmailCount = 0;
-        spamEmailCount = 0;
+        numberOfHamEmails = 0;
+        numberOfSpamEmails = 0;
         wordStatistics = new HashMap<>();
     }
 
@@ -35,7 +35,7 @@ public class BayesSpamFilter {
     }
 
     private void trainHam(File[] emails) {
-        hamEmailCount = emails.length;
+        numberOfHamEmails = emails.length;
 
         for (File email : emails) {
             Set<String> uniqueWords = FileUtil.getUniqueWords(email);
@@ -53,7 +53,7 @@ public class BayesSpamFilter {
     }
 
     private void trainSpam(File[] emails) {
-        spamEmailCount = emails.length;
+        numberOfSpamEmails = emails.length;
 
         for (File email : emails) {
             Set<String> uniqueWords = FileUtil.getUniqueWords(email);
@@ -114,18 +114,18 @@ public class BayesSpamFilter {
     }
 
     private double getProbabilityOfWordGivenSpam(String word) {
-        return wordStatistics.get(word).getSpamOccurrences() / spamEmailCount;
+        return wordStatistics.get(word).getSpamOccurrences() / numberOfSpamEmails;
     }
 
     private double getProbabilityOfSpam() {
-        return (double) spamEmailCount / (hamEmailCount + spamEmailCount);
+        return (double) numberOfSpamEmails / (numberOfHamEmails + numberOfSpamEmails);
     }
 
     private double getProbabilityOfWordGivenHam(String word) {
-        return wordStatistics.get(word).getHamOccurrences() / hamEmailCount;
+        return wordStatistics.get(word).getHamOccurrences() / numberOfHamEmails;
     }
 
     private double getProbabilityOfHam() {
-        return (double) hamEmailCount / (hamEmailCount + spamEmailCount);
+        return (double) numberOfHamEmails / (numberOfHamEmails + numberOfSpamEmails);
     }
 }
