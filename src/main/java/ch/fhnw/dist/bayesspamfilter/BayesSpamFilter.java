@@ -45,7 +45,7 @@ public class BayesSpamFilter {
                         return new WordStatistics(1, ALPHA);
                     }
 
-                    v.incrementHamFrequency();
+                    v.addHamOccurrence();
                     return v;
                 });
             }
@@ -63,7 +63,7 @@ public class BayesSpamFilter {
                         return new WordStatistics(ALPHA, 1);
                     }
 
-                    v.incrementSpamFrequency();
+                    v.addSpamOccurrence();
                     return v;
                 });
             }

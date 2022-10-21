@@ -14,7 +14,7 @@ public class WordStatistics {
         return hamOccurrences;
     }
 
-    public void incrementHamFrequency() {
+    public void addHamOccurrence() {
         ++hamOccurrences;
     }
 
@@ -22,7 +22,7 @@ public class WordStatistics {
         return spamOccurrences;
     }
 
-    public void incrementSpamFrequency() {
+    public void addSpamOccurrence() {
         ++spamOccurrences;
     }
 }
