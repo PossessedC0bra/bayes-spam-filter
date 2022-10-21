@@ -7,23 +7,17 @@ import java.io.File;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Training...");
-
         BayesSpamFilter spamFilter = new BayesSpamFilter();
 
         EmailDataset trainSet = new EmailDataset("/ham-anlern", "/spam-anlern");
         spamFilter.train(trainSet);
 
         if ("--calibrate".equals(args[0])) {
-            System.out.println("=== CALIBRATE ===");
-
             EmailDataset calibrationSet = new EmailDataset("/ham-kallibrierung", "/spam-kallibrierung");
             classify(spamFilter, calibrationSet);
         }
 
         if ("--classify".equals(args[0])) {
-            System.out.println("=== CLASSIFY ===");
-
             EmailDataset testSet = new EmailDataset("/ham-test", "/spam-test");
             classify(spamFilter, testSet);
         }
