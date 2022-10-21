@@ -28,6 +28,7 @@ public class BayesSpamFilter {
     /* *************************************************************************** */
     // TRAIN
     /* *************************************************************************** */
+
     public void train(EmailDataset trainDataset) {
         trainHam(trainDataset.getHamEmails());
         trainSpam(trainDataset.getSpamEmails());
@@ -81,14 +82,21 @@ public class BayesSpamFilter {
     private double getProbabilityOfSpamGivenWords(String[] words) {
         String[] knownWords = getKnownWords(words);
 
-        double pSpamGivenText = getProbabilityOfSpam() * Arrays.stream(knownWords)
+        double pSpamGivenText = Arrays.stream(knownWords)
                 .mapToDouble(this::getProbabilityOfSpamGivenWord)
-                .reduce(1, (a, b) -> a * b);
-        double pHamGivenText = getProbabilityOfHam() * Arrays.stream(knownWords)
+                .reduce(getProbabilityOfSpam(), (a, b) -> a * b);
+                
+        double pHamGivenText = Arrays.stream(knownWords)
                 .mapToDouble(this::getProbabilityOfHamGivenWord)
-                .reduce(1, (a, b) -> a * b);
+                .reduce(getProbabilityOfHam(), (a, b) -> a * b);
 
         return pSpamGivenText / (pSpamGivenText + pHamGivenText);
+    }
+
+    public String[] getKnownWords(String[] emailWords) {
+        return Arrays.stream(emailWords)
+                .filter(wordStatistics::containsKey)
+                .toArray(String[]::new);
     }
 
     private double getProbabilityOfSpamGivenWord(String word) {
@@ -104,18 +112,6 @@ public class BayesSpamFilter {
 
         return wordHamicity / (wordSpamicity + wordHamicity);
     }
-
-
-    /* *************************************************************************** */
-
-    public String[] getKnownWords(String[] emailWords) {
-        return Arrays.stream(emailWords)
-                .filter(wordStatistics::containsKey)
-                .toArray(String[]::new);
-    }
-
-    /* *************************************************************************** */
-
 
     private double getProbabilityOfWordGivenSpam(String word) {
         return wordStatistics.get(word).getSpamOccurrences() / spamEmailCount;
