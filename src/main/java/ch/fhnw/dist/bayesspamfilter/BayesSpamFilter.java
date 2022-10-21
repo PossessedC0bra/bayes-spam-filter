@@ -80,17 +80,11 @@ public class BayesSpamFilter {
     }
 
     private double getProbabilityOfSpamGivenWords(String[] words) {
+        // remove words that where not seen in the training set
         String[] knownWords = getKnownWords(words);
 
-        double pSpamGivenText = Arrays.stream(knownWords)
-                .mapToDouble(this::getProbabilityOfSpamGivenWord)
-                .reduce(getProbabilityOfSpam(), (a, b) -> a * b);
-                
-        double pHamGivenText = Arrays.stream(knownWords)
-                .mapToDouble(this::getProbabilityOfHamGivenWord)
-                .reduce(getProbabilityOfHam(), (a, b) -> a * b);
-
-        return pSpamGivenText / (pSpamGivenText + pHamGivenText);
+        double pWordsGivenSpam = getProbabilityOfWordsGivenSpam(knownWords);
+        return pWordsGivenSpam / (pWordsGivenSpam + getProbabilityOfWordsGivenHam(knownWords));
     }
 
     public String[] getKnownWords(String[] emailWords) {
@@ -99,33 +93,23 @@ public class BayesSpamFilter {
                 .toArray(String[]::new);
     }
 
-    private double getProbabilityOfSpamGivenWord(String word) {
-        double wordSpamicity = getProbabilityOfWordGivenSpam(word);
-        double wordHamicity = getProbabilityOfWordGivenHam(word);
-
-        return wordSpamicity / (wordSpamicity + wordHamicity);
-    }
-
-    private double getProbabilityOfHamGivenWord(String word) {
-        double wordHamicity = getProbabilityOfWordGivenHam(word);
-        double wordSpamicity = getProbabilityOfWordGivenSpam(word);
-
-        return wordHamicity / (wordSpamicity + wordHamicity);
+    private double getProbabilityOfWordsGivenSpam(String[] words) {
+        return Arrays.stream(words)
+                .mapToDouble(this::getProbabilityOfWordGivenSpam)
+                .reduce(1, (a, b) -> a * b);
     }
 
     private double getProbabilityOfWordGivenSpam(String word) {
         return wordStatistics.get(word).getSpamOccurrences() / numberOfSpamEmails;
     }
 
-    private double getProbabilityOfSpam() {
-        return (double) numberOfSpamEmails / (numberOfHamEmails + numberOfSpamEmails);
+    private double getProbabilityOfWordsGivenHam(String[] words) {
+        return Arrays.stream(words)
+                .mapToDouble(this::getProbabilityOfWordGivenHam)
+                .reduce(1, (a, b) -> a * b);
     }
 
     private double getProbabilityOfWordGivenHam(String word) {
         return wordStatistics.get(word).getHamOccurrences() / numberOfHamEmails;
-    }
-
-    private double getProbabilityOfHam() {
-        return (double) numberOfHamEmails / (numberOfHamEmails + numberOfSpamEmails);
     }
 }
