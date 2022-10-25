@@ -44,15 +44,26 @@ public class Main {
             }
         }
 
-        printConfusionMatrix(actualSpam, classifiedSpam, actualHam, classifiedHam);
+        printConfusionMatrixAbsolute(actualSpam, classifiedSpam, actualHam, classifiedHam);
+        printConfusionMatrixPercent(actualSpam, classifiedSpam, actualHam, classifiedHam);
     }
 
-    private static void printConfusionMatrix(int actualSpam, int classifiedSpam, int actualHam, int classifiedHam) {
+    /* *************************************************************************** */
+
+    private static void printConfusionMatrixAbsolute(int actualSpam, int classifiedSpam, int actualHam, int classifiedHam) {
+        printConfusionMatrix(classifiedSpam, actualSpam - classifiedSpam, actualHam - classifiedHam, classifiedHam);
+    }
+
+    private static void printConfusionMatrixPercent(int actualSpam, int classifiedSpam, int actualHam, int classifiedHam) {
         double tp = (double) classifiedSpam / actualSpam;
         double fp = (double) (actualSpam - classifiedSpam) / actualSpam;
         double fn = (double) (actualHam - classifiedHam) / actualHam;
         double tn = (double) classifiedHam / actualHam;
 
+        printConfusionMatrix(tp, fp, fn, tn);
+    }
+
+    private static void printConfusionMatrix(double tp, double fp, double fn, double tn) {
         System.out.println();
         System.out.println("                   Predicted   ");
         System.out.println();
@@ -62,16 +73,5 @@ public class Main {
         System.out.println("Actual          ---------------");
         System.out.printf("          Ham   | %.2f | %.2f |\n", fn, tn);
         System.out.println("                ---------------");
-        System.out.println();
-
-        double precision = tp / (tp + fp);
-        double recall = tp / (tp + fn);
-
-        System.out.println("Precision: " + precision);
-        System.out.println("Recall: " + recall);
-        System.out.println("F1-Score: " + 2 * (precision * recall) / (precision + recall));
-        System.out.println();
-        System.out.println("Accuracy: " + (tp + tn) / (tp + fp + fn + tn));
     }
-
 }
