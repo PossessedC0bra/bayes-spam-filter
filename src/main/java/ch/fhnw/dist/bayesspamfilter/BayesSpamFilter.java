@@ -74,9 +74,10 @@ public class BayesSpamFilter {
     // PREDICT
     /* *************************************************************************** */
 
-    public int predict(String filePath) {
+    public boolean predict(String filePath) {
         String[] words = FileUtil.getUniqueWords(new File(filePath)).toArray(String[]::new);
-        return getProbabilityOfSpamGivenWords(words) > SPAM_THRESHOLD ? 1 : 0;
+
+        return getProbabilityOfSpamGivenWords(words) > SPAM_THRESHOLD;
     }
 
     private double getProbabilityOfSpamGivenWords(String[] words) {

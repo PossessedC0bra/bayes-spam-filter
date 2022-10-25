@@ -30,7 +30,7 @@ public class Main {
         int actualSpam = spamEmails.length;
         int classifiedSpam = 0;
         for (File email : spamEmails) {
-            if (spamFilter.predict(email.getPath()) == 1) {
+            if (spamFilter.predict(email.getPath())) {
                 classifiedSpam++;
             }
         }
@@ -39,7 +39,7 @@ public class Main {
         int actualHam = hamEmails.length;
         int classifiedHam = 0;
         for (File email : hamEmails) {
-            if (spamFilter.predict(email.getPath()) == 0) {
+            if (!spamFilter.predict(email.getPath())) {
                 classifiedHam++;
             }
         }
