@@ -9,17 +9,23 @@ Multiplikation der Wahrscheinlichkeiten aller Wörter wird die Wahrscheinlichkei
 
 ## Kalibrierung
 
-Der Threshold von 0.5 hat sich bei allen Experimenten bewährt.
+Ein Threshold von 0.5 hat sich bei allen Experimenten als gut erwiesen.
 
-Als optimalen Wert für &alpha; hat sich der Wert 0.01 herausgestellt. Dieser Wert liefert den besten trade-off zwischen
-korrekter Klassifizierung von Spam-Emails und möglichst tiefer Fehlklassifizierung von Ham-Emails.
+Nach einigen Experimenten mit dem Wert &alpha; hat sich herausgestellt, dass Werte kleiner als &alpha; = 0.01 bereits
+gute Resultate liefern.
 
-| &alpha; = 0.1             | &alpha; = 0.01 | &alpha; = 0.001 | 
-| --- | --- | --- |
-| ![](docs/alpha_1E-1.png)  | ![](docs/alpha_1E-2.png) | ![](docs/alpha_1E-3.png) |
+Wir haben uns jedoch bewusst gegen den Wert 0.01 entschieden da es uns sehr wichtig war so wenige Ham-Emails als Spam zu
+markieren als nur möglich.
+Da man ab Werten kleiner als &alpha; = 1E-8 vor allem an korrekten Spam-Klassifizierungen verliert, haben wir uns für
+diesen Wert
+entschieden.
+
+| &alpha; = 1           | &alpha; = 1E-2           | &alpha; = 1E-4           | &alpha; = 1E-8           | &alpha; = 1E-12           | &alpha; = 1E-16           |
+|-----------------------|--------------------------|--------------------------|--------------------------|---------------------------|---------------------------|
+| ![](docs/alpha_1.png) | ![](docs/alpha_1E-2.png) | ![](docs/alpha_1E-4.png) | ![](docs/alpha_1E-8.png) | ![](docs/alpha_1E-12.png) | ![](docs/alpha_1E-16.png) |
 
 ## Klassifizierung
 
-| Threshold | &alpha; | Confusion matrix |
-| --- | --- | --- |
-| 0.5 | 0.01 | ![](docs/classification.png) |
+| Threshold  | &alpha;     | Confusion matrix             |
+|------------|-------------|------------------------------|
+| 0.5        | 0.000000001 | ![](docs/classification.png) |
