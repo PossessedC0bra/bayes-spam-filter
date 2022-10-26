@@ -98,20 +98,8 @@ public class BayesSpamFilter {
                 .toArray(String[]::new);
     }
 
-    private double getProbabilityOfWordsGivenSpam(String[] words) {
-        return Arrays.stream(words)
-                .mapToDouble(this::getProbabilityOfWordGivenSpam)
-                .reduce(1, (a, b) -> a * b);
-    }
-
     private double getProbabilityOfWordGivenSpam(String word) {
         return wordStatistics.get(word).getSpamOccurrences() / numberOfSpamEmails;
-    }
-
-    private double getProbabilityOfWordsGivenHam(String[] words) {
-        return Arrays.stream(words)
-                .mapToDouble(this::getProbabilityOfWordGivenHam)
-                .reduce(1, (a, b) -> a * b);
     }
 
     private double getProbabilityOfWordGivenHam(String word) {
