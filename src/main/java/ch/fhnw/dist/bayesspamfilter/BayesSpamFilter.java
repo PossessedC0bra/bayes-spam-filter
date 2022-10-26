@@ -84,8 +84,13 @@ public class BayesSpamFilter {
         // remove words that where not seen in the training set
         String[] knownWords = getKnownWords(words);
 
-        double pWordsGivenSpam = getProbabilityOfWordsGivenSpam(knownWords);
-        return pWordsGivenSpam / (pWordsGivenSpam + getProbabilityOfWordsGivenHam(knownWords));
+        double res = 0.0;
+        for (String word : knownWords) {
+            double pWordGivenSpam = getProbabilityOfWordGivenSpam(word);
+            res += Math.log(1 - pWordGivenSpam) - Math.log(pWordGivenSpam);
+        }
+
+        return 1 / (1 + Math.exp(res));
     }
 
     public String[] getKnownWords(String[] emailWords) {
