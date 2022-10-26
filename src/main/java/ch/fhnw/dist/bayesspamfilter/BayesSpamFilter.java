@@ -86,8 +86,7 @@ public class BayesSpamFilter {
 
         double res = 0.0;
         for (String word : knownWords) {
-            double pWordGivenSpam = getProbabilityOfWordGivenSpam(word);
-            res += Math.log(1 - pWordGivenSpam) - Math.log(pWordGivenSpam);
+            res += Math.log(getProbabilityOfWordGivenHam(word)) - Math.log(getProbabilityOfWordGivenSpam(word));
         }
 
         return 1 / (1 + Math.exp(res));
