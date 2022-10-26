@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class BayesSpamFilter {
 
-    private static final double ALPHA = 1E-8;
+    private static final double ALPHA = 1E-16;
     private static final double SPAM_THRESHOLD = 0.5;
 
     private int numberOfHamEmails;
